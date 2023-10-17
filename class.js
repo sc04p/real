@@ -1,4 +1,5 @@
-class Grass extends Creature{
+let Creature = require('./creature')
+module.exports = class Grass extends Creature{
    
      mul() {
         this.multiply++;

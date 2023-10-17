@@ -1,4 +1,5 @@
-class Alien {
+let Creature = require('./creature')
+module.exports =class Alien {
     constructor(x,y,index)
     {
         this.x = x;
