@@ -3,7 +3,6 @@ module.exports = class Pred extends Creature {
     constructor(x,y,index) {
         super(x,y,index)
         this.energy = 20;
-        
         this.directions = [];
     }
     getNewCoordinates(){
@@ -59,8 +58,8 @@ eat1() {
 }
 move() {
     this.energy--
-    let emptyCells = this.chooseCell(0)
-    let newCell = random(emptyCells)
+    // let emptyCells = this.chooseCell(0)
+    let newCell = this.selectRandomCell(0)
     if (newCell) {
         let newX = newCell[0]
         let newY = newCell[1]

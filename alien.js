@@ -2,14 +2,9 @@ let Creature = require('./creature')
 module.exports =class Alien extends Creature{
     constructor(x,y,index)
     {
-        this.x = x;
-        this.y = y;
-       
-        this.index = index;
-     
+        super(x,y,index)
         this.directions = [];
     }
-
     getNewCoordinates(){
         this.directions = [
             [this.x - 1, this.y - 1],
@@ -36,13 +31,12 @@ module.exports =class Alien extends Creature{
        }
        }
        return found;
-
    }
    
  eat3() {
     // let foods = this.chooseCell(1,2,3,4)
     
-    let food = this.selectRandomCell(foods)
+    let food = this.selectRandomCell(1)
     if (food) {
        
        matrix[this.y][this.x] = 0

@@ -5,7 +5,15 @@ const socket = io();
  
  var side = 20;
  
- 
+ const knopka = document.querySelector('#knopka')
+ knopka.addEventListener('click',handlePause)
+ let pause = false;
+ function handlePause() {
+     console.log('clicked');
+     pause = !pause
+     socket.emit('pause game',pause)
+ }
+
  function setup() {
 
     createCanvas(sideX * side, sideY * side);
