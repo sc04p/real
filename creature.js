@@ -34,5 +34,9 @@ module.exports = class Creature{
      
      }
      
-    
+     selectRandomCell(character) {
+        const cells = this.chooseCell(character);
+        const randomIndex = Math.floor(Math.random() * cells.length);
+        return cells[randomIndex];
+        }
 }

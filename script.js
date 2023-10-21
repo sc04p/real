@@ -1,5 +1,3 @@
-import { Socket } from "socket.io";
-
 
 const sideX = 30;
 const sideY = 30;

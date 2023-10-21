@@ -1,5 +1,5 @@
 let Creature = require('./creature')
-module.exports = class Pred {
+module.exports = class Pred extends Creature {
     constructor(x,y,index) {
         super(x,y,index)
         this.energy = 20;
@@ -24,7 +24,7 @@ module.exports = class Pred {
     }
     mul() {
        
-        var newCell = random(this.chooseCell(2));
+        var newCell = this.selectRandomCell(2);
         if (newCell) {
             var newGrassEater = new Pred(newCell[0], newCell[1], this.index);
             preda.push(newGrassEater);
@@ -33,8 +33,8 @@ module.exports = class Pred {
         }
 }
 eat1() {
-    let foods = this.chooseCell(2)
-    let food = random(foods)
+    // let foods = this.chooseCell(2)
+    let food = this.selectRandomCell(2)
     if (food) {
         this.energy++;
         matrix[this.y][this.x] = 0

@@ -1,5 +1,5 @@
 let Creature = require('./creature')
-module.exports =class Human{
+module.exports =class Human extends Creature{
 
     constructor(x, y, index) {
         super(x,y,index)
@@ -26,8 +26,8 @@ module.exports =class Human{
    
 
 eat2() {
-let foods = this.chooseCell(3)
-let food = random(foods)
+// let foods = this.chooseCell(3)
+let food = this.selectRandomCell(3)
 if (food) {
    
    matrix[this.y][this.x] = 0
@@ -52,8 +52,8 @@ else {
 }
 move() {
 
-let emptyCells = this.chooseCell(0)
-let newCell = random(emptyCells)
+// let emptyCells = this.chooseCell(0)
+let newCell = this.selectRandomCell(0)
 if (newCell) {
    let newX = newCell[0]
    let newY = newCell[1]

@@ -1,5 +1,5 @@
 let Creature = require('./creature')
-module.exports =class Alien {
+module.exports =class Alien extends Creature{
     constructor(x,y,index)
     {
         this.x = x;
@@ -40,9 +40,9 @@ module.exports =class Alien {
    }
    
  eat3() {
-    let foods = this.chooseCell(1,2,3,4)
+    // let foods = this.chooseCell(1,2,3,4)
     
-    let food = random(foods)
+    let food = this.selectRandomCell(foods)
     if (food) {
        
        matrix[this.y][this.x] = 0
@@ -82,10 +82,9 @@ module.exports =class Alien {
        this.move();
     }
     }
-    move() {
-    
-    let emptyCells = this.chooseCell(0)
-    let newCell = random(emptyCells)
+    move() {  
+    // let emptyCells = this.chooseCell(0)
+    let newCell = this.selectRandomCell(0)
     if (newCell) {
        let newX = newCell[0]
        let newY = newCell[1]
