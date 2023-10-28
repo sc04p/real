@@ -1,29 +1,32 @@
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io") (server);
+const io = require("socket.io")(server);
+module.exports = io
 
 app.use(express.static("."));
 
 app.get("/", function (req, res) {
-    res.redirect("index.html");
+  res.redirect("index.html");
 });
 
+statisticsObj = {
+  grass: 0, grassEater: 0, predator: 0
+}
 
-
-matrix=[];
+matrix = [];
 grassArr = [];
-  grassEaterArr =[];
-  preda = [];
-  hum = [];
-  alien = [];
+grassEaterArr = [];
+preda = [];
+hum = [];
+alien = [];
 const sideX = 30;
 const sideY = 30;
-let Grass=require('./class')
-let Human=require('./human')
-let Alien=require('./alien')
-let Pred=require('./predator')
-let GrassEater=require('./grass_eater')
+let Grass = require('./class')
+let Human = require('./human')
+let Alien = require('./alien')
+let Pred = require('./predator')
+let GrassEater = require('./grass_eater')
 function random(min, max) {
   if (min === undefined && max === undefined) {
     return Math.random();
@@ -35,105 +38,132 @@ function random(min, max) {
 }
 
 function charac(quantity, char) {
-    let initialNumber = 0;
-    while (initialNumber < quantity) {
-      let x = Math.floor(random(0, sideX));
-      let y = Math.floor(random(0, sideY));
-      if (matrix[y][x] == 0) {
-        matrix[y][x] = char;
-      }
-      initialNumber++;
+  let initialNumber = 0;
+  while (initialNumber < quantity) {
+    let x = Math.floor(random(0, sideX));
+    let y = Math.floor(random(0, sideY));
+    if (matrix[y][x] == 0) {
+      matrix[y][x] = char;
     }
+    initialNumber++;
   }
+}
 
+for (let i = 0; i < sideY; i++) {
+  matrix.push([]);
+  for (let j = 0; j < sideX; j++) {
+    matrix[i].push(0);
+  }
+}
+//...
+
+//...
+function initGame() {
+  matrix = []
   for (let i = 0; i < sideY; i++) {
     matrix.push([]);
     for (let j = 0; j < sideX; j++) {
       matrix[i].push(0);
     }
   }
-//...
-
-//...
-function initGame(){
-    charac(20,1);
-    charac(25,2);
-    charac(20,3);
-    charac(5,4);
-    charac(3,5);
-    startInterval();
-    initArrays();
+  grassArr = [];
+grassEaterArr = [];
+preda = [];
+hum = [];
+alien = [];
+  charac(20, 1);
+  charac(25, 2);
+  charac(20, 3);
+  charac(5, 4);
+  charac(3, 5);
+  startInterval();
+  initArrays();
 }
 function initArrays() {
-    for(var y = 0; y < matrix.length; ++y){
-      for(var x = 0; x < matrix[y].length; ++x){
-          if(matrix[y][x] == 1){
-              var gr = new Grass(x,y,1);
-              grassArr.push(gr);
-          }
-          else if(matrix[y][x] == 2){
-              var gre = new GrassEater(x,y,1);
-              grassEaterArr.push(gre);
-          }
-          else if(matrix[y][x] == 3){
-              var pre = new Pred(x,y,1);
-              preda.push(pre);
-          
-          }
-          else if(matrix[y][x] == 4)
-          {
-              var hu = new Human(x,y,1);
-              hum.push(hu);
-          }
-          else if(matrix[y][x] == 5)	
-          {
-              var al = new Alien(x,y,1);
-              alien.push(al);
-          }
+  for (var y = 0; y < matrix.length; ++y) {
+    for (var x = 0; x < matrix[y].length; ++x) {
+      if (matrix[y][x] == 1) {
+        var gr = new Grass(x, y, 1);
+        grassArr.push(gr);
+      }
+      else if (matrix[y][x] == 2) {
+        var gre = new GrassEater(x, y, 1);
+        grassEaterArr.push(gre);
+      }
+      else if (matrix[y][x] == 3) {
+        var pre = new Pred(x, y, 1);
+        preda.push(pre);
+
+      }
+      else if (matrix[y][x] == 4) {
+        var hu = new Human(x, y, 1);
+        hum.push(hu);
+      }
+      else if (matrix[y][x] == 5) {
+        var al = new Alien(x, y, 1);
+        alien.push(al);
       }
     }
   }
+}
 
-const speed = 300
+let speed = 300
 let intName;
-function startInterval(){
-    clearInterval(intName)
-    intName=setInterval(function(){playGame()},speed)
+function startInterval() {
+  clearInterval(intName)
+  intName = setInterval(function () { playGame() }, speed)
 }
 
-function playGame(){
-    for(var i in grassArr){
-        grassArr[i].mul();
-     }
-     for(var i in grassEaterArr){
-        grassEaterArr[i].eat();
-     }
-     for (var i in preda) {
-         preda[i].eat1();
-     }
-     for (var i in hum) {
-         hum[i].eat2();
-     }
-     for (var i in alien) {
-         alien[i].eat3();
-     }
-     io.emit('update matrix',matrix)
+function playGame() {
+  for (var i in grassArr) {
+    grassArr[i].mul();
+  }
+  for (var i in grassEaterArr) {
+    grassEaterArr[i].eat();
+  }
+  for (var i in preda) {
+    preda[i].eat1();
+  }
+  for (var i in hum) {
+    hum[i].eat2();
+  }
+  for (var i in alien) {
+    alien[i].eat3();
+  }
+  io.emit('update matrix', matrix)
 }
 
-io.on('connection', function(socket){
-    socket.emit('update matrix', matrix)
-    initGame()
-    socket.on('pause game', handlePause)
+io.on('connection', function (socket) {
+  socket.emit('update matrix', matrix)
+  initGame()
+  socket.on('pause game', handlePause)
+  socket.on('change season', handleChangeSeason)
+  socket.on('restart game', handleRestartGame)
 })
+function handleChangeSeason(season){
+  if (season == 1) {
+    speed = 1000
+  } else if (season == 2 || season == 4){
+    speed = 700
+  } else {
+    speed = 300
+  }
+  startInterval()
+}
 function handlePause(ifPaused) {
   if (ifPaused) {
     clearInterval(intName);
-  } else
-  {
+  } else {
     startInterval()
   }
 }
+function handleRestartGame() {
+
+  
+  clearInterval(intName)
+  initGame()
+}
 
 server.listen(3000, () => {
-    console.log("server running on 3000")
+  console.log("server running on 3000")
 })

@@ -6,13 +6,57 @@ const socket = io();
  var side = 20;
  
  const knopka = document.querySelector('#knopka')
+ const restartBtn = document.querySelector('#restart')
  knopka.addEventListener('click',handlePause)
+ restartBtn.addEventListener('click', handleRestartGame)
  let pause = false;
  function handlePause() {
      console.log('clicked');
      pause = !pause
      socket.emit('pause game',pause)
  }
+ function handleRestartGame() {
+     socket.emit('restart game')
+ }
+//  statistics
+socket.on("change statistics", handleAddStatistics);
+const grass = document.querySelector("#grass");
+const grassEater = document.querySelector("#grassEater");
+const predator = document.querySelector("#predator");
+
+// seasons
+const seasonsBtn = document.querySelector('#seasons')
+seasonsBtn.addEventListener('click', handleChangeSeason)
+let season = 0;
+function handleChangeSeason() {
+    if (season < 4) {
+        season++;
+    } else {
+        season = 1;
+    }
+    socket.emit("change season", season)
+    if (season == 1) {
+        seasonsBtn.textContent = 'Winter'
+    }
+    else if (season == 2) {
+        seasonsBtn.textContent = 'Spring'
+    }
+    else if (season == 3) {
+        seasonsBtn.textContent = 'Summer'
+    }
+    else if (season == 4) {
+        seasonsBtn.textContent = 'Autumn'
+    }
+}
+
+function handleAddStatistics(obj) {
+    grass.innerText = "New grasses: " + obj.grass;
+    grassEater.innerText = "New grass eaters: " + obj.grassEater;
+    predator.innerText = "New predators: " + obj.predator;
+   
+    }
+
+
 
  function setup() {
 
@@ -27,7 +71,17 @@ const socket = io();
         for (var x = 0; x < sideX; x++) {
  
             if (matrix[y][x] == 1) {
-                fill("green");
+   
+                if(season == 1){
+                    fill("white")
+                } else if ( season == 2){
+                    fill("pink")
+                }
+                else if (season == 4) {
+                    fill("brown")
+                } else {
+                    fill("green")
+                }
             }
             else if (matrix[y][x] == 0) {
                 fill("#acacac");

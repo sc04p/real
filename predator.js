@@ -1,4 +1,5 @@
 let Creature = require('./creature')
+const io = require("./server");
 module.exports = class Pred extends Creature {
     constructor(x,y,index) {
         super(x,y,index)
@@ -28,7 +29,8 @@ module.exports = class Pred extends Creature {
             var newGrassEater = new Pred(newCell[0], newCell[1], this.index);
             preda.push(newGrassEater);
             matrix[newCell[1]][newCell[0]] = 3;
- 
+            statisticsObj.predator++;
+            io.emit("change statistics", statisticsObj);
         }
 }
 eat1() {

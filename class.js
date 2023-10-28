@@ -1,4 +1,6 @@
 let Creature = require('./creature')
+const io = require("./server");
+
 module.exports = class Grass extends Creature{
    
      mul() {
@@ -9,6 +11,8 @@ module.exports = class Grass extends Creature{
             grassArr.push(newGrass);
             matrix[newCell[1]][newCell[0]] = 1;
             this.multiply = 0;  
+            statisticsObj.grass++;
+io.emit("change statistics", statisticsObj);
         }
     }
     
